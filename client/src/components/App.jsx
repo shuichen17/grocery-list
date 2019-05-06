@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 
+import GroceryList from './GroceryList.jsx';
+import AddGroceryForm from './AddGroceryForm.jsx';
+
 import mockData from '../../../mock_groceries.js';
 
 // create the GroceryList and GroceryListItem components
@@ -10,8 +13,18 @@ class App extends Component {
     super(props);
 
     this.state = {
-
+      groceries: mockData,
+      nextId: mockData.length + 1,
     };
+    this.addGrocery = this.addGrocery.bind(this);
+  }
+
+  addGrocery(grocery) {
+    var newGrocery = Object.assign({}, grocery);
+    newGrocery.id = this.state.nextId++;
+    const newGroceries = this.state.groceries.slice();
+    newGroceries.push(newGrocery);
+    this.setState({ groceries: newGroceries });
   }
 
   render() {
@@ -20,41 +33,8 @@ class App extends Component {
         <img src="grocery-bags.png" />
         <div id="app">
           <h1>Grocery List</h1>
-          <form>
-            <label> Item
-              <input name="item" value="" />
-            </label>
-            <label> Qunatity
-              <input name="quantity" value="" />
-            </label>
-            <button>Add Grocery</button>
-          </form>
-          <ul className="groceries">
-            <li>
-              <span> frozen pizza </span>
-              <span> 5 </span>
-            </li>
-            <li>
-              <span> noosa yogurt </span>
-              <span> 10 </span>
-            </li>
-            <li>
-              <span> kombucha </span>
-              <span> 2 </span>
-            </li>
-            <li>
-              <span> iced coffee </span>
-              <span> 1 </span>
-            </li>
-            <li>
-              <span> avocado </span>
-              <span> 1 </span>
-            </li>
-            <li>
-              <span> egg rolls </span>
-              <span> 1 </span>
-            </li>
-          </ul>
+          <AddGroceryForm addGrocery={this.addGrocery} />
+          <GroceryList groceries={this.state.groceries} />
         </div>
       </div>
     );
